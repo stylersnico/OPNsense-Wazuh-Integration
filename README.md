@@ -7,6 +7,16 @@ The goal of this project is to ship [OPNsense](https://opnsense.org/) logs into 
 * Custom decoder and rules for web GUI logins (failed, successful, brute force)
 * Rule 87702 (repeated blocks from one source) lowered from level 10 to 6, so internet scanners hitting the WAN show on the dashboard without mailing you every few minutes
 
+## Related repositories
+
+| Repo | Why |
+|---|---|
+| [Wazuh-Antimalware-Stack](https://github.com/stylersnico/Wazuh-Antimalware-Stack) | the Wazuh manager setup these rules plug into. Its **Security detections** dashboard has a *Firewall (OPNsense)* panel built on this repo's rules (block bursts, web GUI and SSH logins by source IP) |
+| [Naxsi-Wazuh-Integration](https://github.com/stylersnico/Naxsi-Wazuh-Integration) | same idea for the Naxsi WAF on the reverse proxy behind OPNsense |
+| [Custom-Naxsi-Crowdsec-Configs](https://github.com/stylersnico/Custom-Naxsi-Crowdsec-Configs) | the reverse proxy itself (Nginx + Naxsi + CrowdSec) |
+
+None is required: this repo works on any Wazuh manager. Without the stack's dashboard, find the events in *Threat Hunting* with `rule.groups: opnsense or rule.groups: pfsense`.
+
 --------
 
 ## Structure
