@@ -1,0 +1,19 @@
+<!--
+  OPNsense decoders (logs received by syslog on the manager).
+
+  Firewall (filterlog), sshd and the other standard daemons are decoded by the
+  Wazuh ruleset (pfSense and sshd decoders). Only the web GUI logins need this.
+-->
+
+<!--
+  audit[1234]: /index.php: Web GUI authentication error for 'root' from 192.168.1.50
+  audit[1234]: /index.php: Successful login for user 'root' from: 192.168.1.50 (using Local Database)
+-->
+<!-- The ruleset's solaris_bsm decoder already takes every "audit" program:
+     this one is its child, so it must stay loaded after it (etc/decoders is). -->
+<decoder name="opnsense-audit-login">
+  <parent>solaris_bsm</parent>
+  <prematch type="pcre2">(?:Web GUI authentication error for|Successful login for user) '</prematch>
+  <regex type="pcre2">(?:error for|for user) '([^']*)' from:? ([0-9a-fA-F.:]+)</regex>
+  <order>dstuser,srcip</order>
+</decoder>
